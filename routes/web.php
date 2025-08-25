@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AuthController::class, 'login'])->name('login');
-Route::post('auth', [AuthController::class, 'authentication'])->name('auth.authentication');
+Route::middleware('loginPage')->group(function () {
+    Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::post('authentication', [AuthController::class, 'authentication'])->name('login.process');
+});
+
 
 Route::middleware('auth')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::middleware('admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return 'Admin';
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     });
 });
