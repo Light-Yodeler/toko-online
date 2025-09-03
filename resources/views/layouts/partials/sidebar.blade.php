@@ -19,10 +19,16 @@
     <div class="m-4">
         <ul class="mb-4 flex flex-col gap-1">
             <li>
-                <a aria-current="page" class="active" href="#">
-                    <button
-                        class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize"
-                        type="button">
+                <a href="{{ route('admin.dashboard') }}">
+                    <button @class([
+                        'middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg w-full flex items-center gap-4 px-4 capitalize',
+                        // aktif
+                        'bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]' => request()->routeIs(
+                            'admin.dashboard'),
+                        // non-aktif
+                        'text-white hover:bg-white/10 active:bg-white/30' => !request()->routeIs(
+                            'admin.dashboard'),
+                    ]) type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             aria-hidden="true" class="w-5 h-5 text-inherit">
                             <path
@@ -39,10 +45,18 @@
                 </a>
             </li>
             <li>
-                <a class="" href="#">
-                    <button
-                        class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
-                        type="button">
+                <a href="{{ route('admin.user') }}">
+                    <button @class([
+                        'middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg w-full flex items-center gap-4 px-4 capitalize',
+                        // aktif
+                        'bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85]' => request()->routeIs(
+                            'admin.user.*',
+                            'admin.user'),
+                        // non-aktif
+                        'text-white hover:bg-white/10 active:bg-white/30' => !request()->routeIs(
+                            'admin.user.*',
+                            'admin.user'),
+                    ]) type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                             aria-hidden="true" class="w-5 h-5 text-inherit">
                             <path fill-rule="evenodd"
@@ -51,12 +65,12 @@
                         </svg>
                         <p
                             class="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                            profile</p>
+                            User</p>
                     </button>
                 </a>
             </li>
             <li>
-                <a class="" href="#">
+                <a aria-current="page" class="active" href="#">
                     <button
                         class="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                         type="button">

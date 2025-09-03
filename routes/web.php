@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('loginPage')->group(function () {
@@ -14,5 +15,12 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/user', [UserController::class, 'index'])->name('admin.user');
+        Route::get('/user/data', [UserController::class, 'dataUser'])->name('admin.user.data');
+        Route::get('/user/data/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit');
+        Route::get('/user/data/add', [UserController::class, 'addUser'])->name('admin.user.add');
+        Route::post('/user/data/create', [UserController::class, 'createUser'])->name('admin.user.create');
+        Route::post('/user/data/update/{id}', [UserController::class, 'update'])->name('admin.user.update');
+        Route::delete('/user/data/delete/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
     });
 });
