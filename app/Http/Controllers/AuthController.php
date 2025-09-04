@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 
 class AuthController extends Controller
 {
@@ -63,38 +64,75 @@ class AuthController extends Controller
     //     return redirect()->route('login')->with('flash', $message);
     // }
 
+    // public function authentication(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email' => 'required|email', // Tambah validasi format email
+    //         'password' => 'required'
+    //     ]);
+
+    //     // Gunakan Auth::attempt() langsung dengan credentials
+    //     if (Auth::attempt($credentials)) {
+    //         $request->session()->regenerate();
+    //         $user = User::with('role')->find(Auth::id());
+
+    //         // dd([
+    //         //     'class' => get_class($user),
+    //         //     'file' => (new \ReflectionC - lass($user))->getFileName(),
+    //         //     'hasMethod_isAdmin' => method_exists($user, 'isAdmin'),
+    //         // ]);
+    //         // dd($user->isAdmin());
+
+    //         if ($user->isAdmin()) {
+    //             // dd(Auth::user()->isAdmin());
+    //             return redirect()->route('admin.dashboard');
+    //         }
+    //         // Tambahkan role lainnya di sini...
+
+    //         // Default redirect jika tidak ada role yang cocok
+    //         // abort(404);
+    //     }
+    //     $message = [
+    //         'message' => 'Email atau password salah',
+    //         'type' => 'error'
+
+    //     ];
+    //     // Jika Auth::attempt gagal
+    //     return redirect()->route('login')->with('flash', $message);
+    // }
+
     public function authentication(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email', // Tambah validasi format email
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        // Gunakan Auth::attempt() langsung dengan credentials
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $user = User::with('role')->find(Auth::id());
 
-            // dd([
-            //     'class' => get_class($user),
-            //     'file' => (new \ReflectionC - lass($user))->getFileName(),
-            //     'hasMethod_isAdmin' => method_exists($user, 'isAdmin'),
-            // ]);
-            // dd($user->isAdmin());
+            $user = Auth::user(); // atau ->loadMissing('role') bila perlu relasi
 
-            if ($user->isAdmin()) {
+            if (method_exists($user, 'isAdmin') && $user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             }
-            // Tambahkan role lainnya di sini...
 
-            // Default redirect jika tidak ada role yang cocok
-            abort(404);
+            // ←==== Wajib ada: ke halaman default user non-admin
+            return redirect()->intended('/home');
         }
 
-        // Jika Auth::attempt gagal
-        return back()->with('flash', [
+        // gagal login
+        return redirect()->route('login')->with('flash', [
             'type' => 'error',
             'message' => 'Email atau password salah'
-        ]);
+        ])->withInput(['email' => $request->email]);
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();                         // hapus auth info sesi
+        $request->session()->invalidate();      // kosongkan data + regenarate session ID
+        $request->session()->regenerateToken(); // ganti CSRF token
+        return redirect()->route('login');      // arahkan ke halaman login
     }
 }

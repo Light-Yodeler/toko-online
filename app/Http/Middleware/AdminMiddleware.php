@@ -15,19 +15,34 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
+    // public function handle(Request $request, Closure $next): Response
+    // {
 
+    //     if (!Auth::check()) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $user = Auth::user();
+
+    //     if ($user->role === User::ROLE_ADMIN) {
+    //         return $next($request);
+    //     }
+
+    //     return redirect('/')->with('error', 'Akses admin ditolak.');
+    // }
+    // app/Http/Middleware/AdminMiddleware.php
+    public function handle(Request $request, Closure $next)
+    {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
-
-        if ($user->role === User::ROLE_ADMIN) {
+        if (method_exists($user, 'isAdmin') && $user->isAdmin()) {
             return $next($request);
         }
 
-        abort(404);
+        return redirect('/home')->with('error', 'Akses admin ditolak.');
+        // abort_if(!$user?->isAdmin(), 403);
     }
 }
