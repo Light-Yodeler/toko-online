@@ -53,6 +53,12 @@ $(function () {
                 name: "role",
             },
             {
+                data: "photo",
+                name: "photo",
+                orderable: false,
+                searchable: false,
+            },
+            {
                 data: "action",
                 name: "action",
                 orderable: false,
@@ -92,4 +98,25 @@ $(document).on("click", ".delete-btn", function (e) {
             });
         }
     });
+});
+
+function path(path) {}
+
+$(document).ready(function () {
+    //preview image
+    document
+        .getElementById("photo")
+        .addEventListener("change", function (event) {
+            const [file] = event.target.files; // ambil file pertama
+            const preview = document.getElementById("photoPreview");
+
+            if (file) {
+                preview.src = URL.createObjectURL(file); // buat URL lokal sementara
+                preview.classList.remove("hidden"); // tampilkan preview
+            }
+
+            // else {
+            //     preview.classList.add("hidden"); // sembunyikan kalau tidak ada file
+            // }
+        });
 });
