@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPhotoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('loginPage')->group(function () {
@@ -22,5 +23,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/user/data/create', [UserController::class, 'createUser'])->name('admin.user.create');
         Route::post('/user/data/update/{id}', [UserController::class, 'update'])->name('admin.user.update');
         Route::delete('/user/data/delete/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
+        Route::get('/users/{user}/photo', [UserPhotoController::class, 'show'])->name('admin.user.photo');
     });
 });

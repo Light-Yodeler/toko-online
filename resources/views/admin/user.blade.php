@@ -23,6 +23,7 @@
                             <th class="px-4 py-2">Username</th>
                             <th class="px-4 py-2">Email</th>
                             <th class="px-4 py-2">Role</th>
+                            <th class="px-4 py-2">Photo</th>
                             <th class="px-4 py-2">Aksi</th>
                         </tr>
                     </thead>

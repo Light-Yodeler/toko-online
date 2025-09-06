@@ -48,26 +48,31 @@ class StoreUserRequest extends FormRequest
                 Rule::in([1, 2, 3]),        // hanya boleh 1, 2, atau 3
                 Rule::exists('roles', 'id') // memastikan ID ada di tabel roles
             ],
+            'photo'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
     public function messages(): array
     {
         return [
             'username.required' => 'Form username tidak boleh kosong.',
-            'username.unique' => 'Username sudah digunakan.',
-            'username.regex' => 'Username hanya boleh huruf, angka, dan underscore.',
+            'username.unique'  => 'Username sudah digunakan.',
+            'username.regex'   => 'Username hanya boleh huruf, angka, dan underscore.',
 
-            'name.required' => 'Nama lengkap wajib diisi.',
-            'name.max' => 'Nama maksimal 255 karakter.',
+            'name.required'    => 'Nama lengkap wajib diisi.',
+            'name.max'         => 'Nama maksimal 255 karakter.',
 
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
+            'email.required'   => 'Email wajib diisi.',
+            'email.email'      => 'Format email tidak valid.',
+            'email.unique'     => 'Email sudah terdaftar.',
 
-            'role_id.required' => 'Role harus dipilih.',
-            'role_id.integer'  => 'Role harus berupa angka.',
-            'role_id.in'       => 'Role tidak valid.',
-            'role_id.exists'   => 'Role tidak ditemukan.',
+            'role.required' => 'Role harus dipilih.',
+            'role.integer'  => 'Role harus berupa angka.',
+            'role.in'       => 'Role tidak valid.',
+            'role.exists'   => 'Role tidak ditemukan.',
+
+            'photo.image'      => 'Hanya file gambar diperbolehkan',
+            'photo.mimes'      => 'Foto hanya boleh jpg, jpeg, atau png.',
+            'photo.max'        => 'Ukuran foto maksimal 2MB.',
         ];
     }
 }
