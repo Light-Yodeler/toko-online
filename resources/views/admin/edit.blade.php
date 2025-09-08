@@ -71,7 +71,7 @@
                     <!-- Preview -->
                     <div class="mt-3">
                         <img id="photoPreview"
-                            src="{{ !$editData->photo_path ? route('admin.user.photo', $user) : route('admin.user.photo', $user) }}"
+                            src="{{ route('admin.user.photo', $user) }}?v={{ $user->updated_at->timestamp }}"
                             alt="Preview Foto" class="w-32 h-32 rounded-full object-cover border border-gray-300">
                     </div>
                 </div>

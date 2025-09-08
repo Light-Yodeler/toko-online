@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\KasirMiddleware;
 use App\Http\Middleware\LoginMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => AdminMiddleware::class,
             'loginPage' => LoginMiddleware::class,
+            'kasir' => KasirMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

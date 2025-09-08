@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         if (request()->ajax()) {
             $data = User::with('role') // eager load role dengan kolom id dan name
-                ->select(['id', 'name', 'username', 'email', 'role_id']); // foreign key role_id dari tabel users/ pilih kolom yang dibutuhkan
+                ->select(['id', 'name', 'username', 'email', 'role_id', 'updated_at']); // foreign key role_id dari tabel users/ pilih kolom yang dibutuhkan
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('role', function ($row) {
@@ -33,7 +33,8 @@ class UserController extends Controller
                 })
                 ->addColumn('photo', function ($row) {
                     $src = route('admin.user.photo', $row->id); // atau asset('storage/photos/'.$row->photo)
-                    return '<img src="' . $src . '" alt="Avatar" class="w-10 h-10 object-cover border border-gray-300">';
+                    $update_at = $row->updated_at->timestamp;
+                    return '<img src="' . $src . '?v=' . $update_at . '" alt="Avatar" class="w-10 h-10 object-cover border border-gray-300">';
                 })
                 ->addColumn('action', function ($row) {
                     $url = route('admin.user.delete', $row->id);
@@ -117,11 +118,14 @@ class UserController extends Controller
         if ($request->hasFile('photo')) {
             $user = User::find($id);
             // hapus foto lama jika ada
-            if ($user->photo_path && Storage::disk('public')->exists($user->photo_path)) {
-                Storage::disk('public')->delete($user->photo_path);
+            if ($user->photo_path && Storage::disk('private')->exists($user->photo_path)) {
+                Storage::disk('private')->delete($user->photo_path);
             }
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
             // store file baru
-            $path = $request->file('photo')->store('users', 'public');
+            $path = $request->file('photo')->storeAs('users', $filename, 'private');
+        } else {
+            $path = null;
         }
         $user = User::findOrFail($id);
         $user->update([

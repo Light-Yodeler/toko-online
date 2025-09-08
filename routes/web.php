@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Kasir\DashboardController as KasirController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPhotoController;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{user}/photo', [UserPhotoController::class, 'show'])->name('admin.user.photo');
     });
 });
+
+// Route::middleware('auth')->group(function () {
+//     Route::middleware('kasir')->group(function () {
+//         Route::get('/dashboard', [KasirController::class, 'index'])->name('kasir.dashboard');
+//     });
+// });
