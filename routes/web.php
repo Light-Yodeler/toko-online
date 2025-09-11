@@ -15,8 +15,8 @@ Route::middleware('loginPage')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::middleware('admin')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/user/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/user', [UserController::class, 'index'])->name('admin.user');
         Route::get('/user/data', [UserController::class, 'dataUser'])->name('admin.user.data');
         Route::get('/user/data/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit');
@@ -24,12 +24,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/user/data/create', [UserController::class, 'createUser'])->name('admin.user.create');
         Route::post('/user/data/update/{id}', [UserController::class, 'update'])->name('admin.user.update');
         Route::delete('/user/data/delete/{id}', [UserController::class, 'destroy'])->name('admin.user.delete');
-        Route::get('/users/{user}/photo', [UserPhotoController::class, 'show'])->name('admin.user.photo');
+        Route::get('/user/admin/{user}/photo', [UserPhotoController::class, 'show'])->name('admin.user.photo');
     });
 });
 
-// Route::middleware('auth')->group(function () {
-//     Route::middleware('kasir')->group(function () {
-//         Route::get('/dashboard', [KasirController::class, 'index'])->name('kasir.dashboard');
-//     });
-// });
+Route::middleware('auth')->group(function () {
+    Route::middleware('role:kasir')->group(function () {
+        Route::get('/kasir/dashboard', [KasirController::class, 'index'])->name('kasir.dashboard');
+        Route::get('/user/kasir/{user}/photo', [UserPhotoController::class, 'show'])->name('kasir.photo');
+    });
+});

@@ -24,7 +24,7 @@ class KasirMiddleware
         if (method_exists($user, 'isKasir') && $user->isKasir()) {
             return $next($request);
         }
-
-        return redirect('/home')->with('error', 'Akses kasir ditolak.');
+        abort(403, 'middleware');
+        // return redirect('/home')->with('error', 'Akses kasir ditolak.');
     }
 }

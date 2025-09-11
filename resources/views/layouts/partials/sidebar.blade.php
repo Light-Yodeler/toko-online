@@ -1,25 +1,33 @@
 <aside
     class="bg-gradient-to-br from-gray-800 to-gray-900 -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0">
-    <div class="relative border-b border-white/20">
-        <a class="flex items-center gap-4 py-6 px-8" href="#/">
-            <h6 class="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
-                Material Tailwind Dashboard</h6>
+    <div class="border-b border-white/20 px-6 py-4">
+        @php
+            $dashboardRouteName = auth()->user()?->isAdmin() ? 'admin.dashboard' : 'kasir.dashboard';
+        @endphp
+        <a href="{{ route($dashboardRouteName) }}" class="flex items-center gap-3 group">
+            {{-- <div
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white font-semibold uppercase group-hover:bg-white/20">
+                {{ \Illuminate\Support\Str::substr(auth()->user()->name, 0, 1) }}
+            </div> --}}
+            <img src="{{ auth()->user()->isAdmin() ? route('admin.user.photo', auth()->id()) : route('kasir.photo', auth()->id()) }}"
+                alt="Profile Photo" class="h-10 w-10 rounded-full object-cover group-hover:opacity-90">
+            <div class="min-w-0">
+                <p class="text-sm font-semibold text-white truncate">
+                    {{ auth()->user()->name }}
+                </p>
+                <p class="text-xs text-white/70 truncate">
+                    {{ optional(auth()->user()->role)->name ?? '—' }}
+                </p>
+            </div>
         </a>
-        <button
-            class="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
-            type="button">
-            <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                    stroke="currentColor" aria-hidden="true" class="h-5 w-5 text-white">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </span>
-        </button>
     </div>
     <div class="m-4">
         <ul class="mb-4 flex flex-col gap-1">
             <li>
-                <a href="{{ route('admin.dashboard') }}">
+                @php
+                    $dashboardRouteName = auth()->user()?->isKasir() ? 'kasir.dashboard' : 'admin.dashboard';
+                @endphp
+                <a href="{{ route($dashboardRouteName) }}">
                     <button @class([
                         'middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg w-full flex items-center gap-4 px-4 capitalize',
                         // aktif
