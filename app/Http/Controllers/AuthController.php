@@ -114,11 +114,16 @@ class AuthController extends Controller
             $user = Auth::user(); // atau ->loadMissing('role') bila perlu relasi
 
             if (method_exists($user, 'isAdmin') && $user->isAdmin()) {
-                return redirect()->route('admin.dashboard');
+                // dd(Auth::user()->role);
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            if (method_exists($user, 'isKasir') && $user->isKasir()) {
+                // dd(Auth::user()->role);
+                return redirect()->intended(route('kasir.dashboard'));
             }
 
             // ←==== Wajib ada: ke halaman default user non-admin
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
         }
 
         // gagal login

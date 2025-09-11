@@ -16,9 +16,16 @@ class LoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return $next($request);
+        if (Auth::check()) {
+            $u = Auth::user();
+            if (method_exists($u, 'isAdmin') && $u->isAdmin()) {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            if (method_exists($u, 'isKasir') && $u->isKasir()) {
+                return redirect()->intended(route('kasir.dashboard'));
+            }
+            return redirect('/'); // fallback
         }
-        return back()->withInput();
+        return $next($request);
     }
 }

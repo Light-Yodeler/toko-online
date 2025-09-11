@@ -49,17 +49,17 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return optional($this->role)->name === 'admin';
+        return optional($this->role)->name === 'admin'; //Helper Laravel untuk menghindari error “Trying to get property ‘name’ of non-object”
     }
 
     public function isKasir()
     {
-        return $this->role === self::ROLE_KASIR;
+        return optional($this->role)->name === 'kasir';
     }
 
     public function isManager()
     {
-        return $this->role === self::ROLE_MANAGER;
+        return optional($this->role)->name === 'manager';
     }
 
 
